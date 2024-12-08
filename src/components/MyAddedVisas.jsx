@@ -14,6 +14,7 @@ const MyAddedVisas = () => {
     fee: "",
     description: "",
   });
+  const [loading, setLoading] = useState(true); // Loader state
 
   useEffect(() => {
     if (user) {
@@ -24,6 +25,7 @@ const MyAddedVisas = () => {
   // Fetch visas added by the logged-in user
   const fetchMyVisas = async () => {
     try {
+      setLoading(true); // Start loader
       const response = await axios.get(
         `${import.meta.env.VITE_SERVER_URL}/visas?addedBy=${user.email}` // Send user email as query param
       );
@@ -34,6 +36,8 @@ const MyAddedVisas = () => {
     } catch (error) {
       console.error("Error fetching visas:", error);
       Swal.fire("Error!", "There was an error fetching your visas.", "error");
+    } finally {
+      setLoading(false); // Stop loader
     }
   };
 
@@ -108,6 +112,14 @@ const MyAddedVisas = () => {
       Swal.fire("Error!", "There was an error updating the visa.", "error");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-10 h-10 border-4 border-blue-600 border-dotted rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">

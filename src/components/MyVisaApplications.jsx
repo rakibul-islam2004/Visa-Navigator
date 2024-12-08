@@ -8,6 +8,7 @@ const MyVisaApplications = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [applications, setApplications] = useState([]);
+  const [loading, setLoading] = useState(true); // Loader state
 
   useEffect(() => {
     // Redirect to login if not logged in
@@ -18,6 +19,7 @@ const MyVisaApplications = () => {
     // Fetch user visa applications
     const fetchApplications = async () => {
       try {
+        setLoading(true); // Start loader
         const response = await axios.get(
           `${import.meta.env.VITE_SERVER_URL}/my-applications`,
           {
@@ -27,6 +29,8 @@ const MyVisaApplications = () => {
         setApplications(response.data);
       } catch (error) {
         Swal.fire("Error!", "Failed to fetch applications.", "error");
+      } finally {
+        setLoading(false); // Stop loader
       }
     };
     fetchApplications();
@@ -45,6 +49,14 @@ const MyVisaApplications = () => {
       Swal.fire("Error!", "Failed to cancel application.", "error");
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-10 h-10 border-4 border-blue-600 border-dotted rounded-full animate-spin"></div>
+      </div>
+    );
+  }
 
   if (applications.length === 0) {
     return <div>No applications found.</div>;

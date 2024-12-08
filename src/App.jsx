@@ -12,6 +12,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/AuthContext";
 import AllVisasPage from "./components/AllVisasPage";
 import MyApplications from "./components/MyVisaApplications";
+import NotFoundPage from "./components/NotFoundPage";
 
 const App = () => {
   return (
@@ -57,6 +58,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
         <Footer />

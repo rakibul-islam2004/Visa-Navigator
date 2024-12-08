@@ -2,18 +2,32 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { FaMoon, FaSun } from "react-icons/fa"; // Import icons
 
 const HomePage = () => {
-  const navigate = useNavigate(); // Initialize the navigate function
+  const navigate = useNavigate();
 
   // Handle redirection to Visa details page
   const handleSeeDetails = (visaId) => {
-    navigate(`/visa-details/${visaId}`); // Navigate to the Visa details page
+    navigate(`/visa-details/${visaId}`);
   };
 
-  const [visas, setVisas] = useState([]); // Latest visas
+  const [visas, setVisas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Dark/Light theme state
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+  // Apply theme to the body element
+  useEffect(() => {
+    if (theme === "dark") {
+      document.body.classList.add("dark");
+    } else {
+      document.body.classList.remove("dark");
+    }
+    localStorage.setItem("theme", theme); // Store theme in localStorage
+  }, [theme]);
 
   // Fetching the latest visas
   useEffect(() => {
@@ -84,6 +98,19 @@ const HomePage = () => {
 
   return (
     <div>
+      {/* Theme Toggle Button with Icons */}
+      <button
+        onClick={() => setTheme(theme === "light" ? "dark" : "light")}
+        className="fixed top-4 right-4 p-3 bg-gray-800 text-white rounded-full z-10"
+        aria-label="Toggle Dark/Light Mode"
+      >
+        {theme === "light" ? (
+          <FaMoon className="text-xl" />
+        ) : (
+          <FaSun className="text-xl" />
+        )}
+      </button>
+
       {/* Banner Section */}
       <div
         className={`py-8 text-white ${slides[currentSlide].bgClass} relative`}
@@ -137,37 +164,45 @@ const HomePage = () => {
       </div>
 
       {/* Latest Visas Section */}
-      <div className="py-16 px-4 bg-gray-100">
-        <h2 className="text-3xl font-semibold text-center mb-8">
+      <div className="py-16 px-4 bg-gray-100 dark:bg-gray-800">
+        <h2 className="text-3xl font-semibold text-center mb-8 dark:text-white">
           Latest Visas
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {visas.length === 0 ? (
-            <p className="text-center text-xl col-span-full">
+            <p className="text-center text-xl col-span-full dark:text-white">
               No visas available at the moment.
             </p>
           ) : (
             visas.map((visa) => (
               <div
                 key={visa._id}
-                className="bg-white shadow-lg rounded-lg overflow-hidden"
+                className="bg-white dark:bg-gray-700 shadow-lg rounded-lg overflow-hidden"
               >
                 <div className="p-4">
                   <img
                     src={
                       visa.countryImageUrl || "path/to/placeholder-image.jpg"
-                    } // Use a placeholder image
+                    }
                     alt={visa.country}
                     className="w-full h-32 object-cover rounded"
                   />
-                  <h3 className="text-xl font-semibold">{visa.country}</h3>
-                  <p className="mt-2">Visa Type: {visa.visaType}</p>
-                  <p>Processing Time: {visa.processingTime}</p>
-                  <p>Fee: {visa.fee}</p>
-                  <p>Validity: {visa.validity}</p>
-                  <p>Application Method: {visa.applicationMethod}</p>
+                  <h3 className="text-xl font-semibold dark:text-white">
+                    {visa.country}
+                  </h3>
+                  <p className="mt-2 dark:text-white">
+                    Visa Type: {visa.visaType}
+                  </p>
+                  <p className="dark:text-white">
+                    Processing Time: {visa.processingTime}
+                  </p>
+                  <p className="dark:text-white">Fee: {visa.fee}</p>
+                  <p className="dark:text-white">Validity: {visa.validity}</p>
+                  <p className="dark:text-white">
+                    Application Method: {visa.applicationMethod}
+                  </p>
                   <button
-                    onClick={() => handleSeeDetails(visa._id)} // Navigate to the Visa Details page
+                    onClick={() => handleSeeDetails(visa._id)}
                     className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                   >
                     See Details
@@ -188,11 +223,11 @@ const HomePage = () => {
       </div>
 
       {/* Extra Section 1 */}
-      <div className="py-16 px-4 text-center">
-        <h2 className="text-3xl font-semibold mb-4">
+      <div className="py-16 px-4 text-center dark:bg-gray-700">
+        <h2 className="text-3xl font-semibold mb-4 dark:text-white">
           Why Choose Our Visa Services?
         </h2>
-        <p className="text-lg max-w-2xl mx-auto">
+        <p className="text-lg max-w-2xl mx-auto dark:text-white">
           We offer a variety of visa types with easy-to-understand guides and
           fast approval times. Discover the best visa options tailored to your
           needs.
@@ -200,9 +235,11 @@ const HomePage = () => {
       </div>
 
       {/* Extra Section 2 */}
-      <div className="py-16 px-4 bg-gray-100 text-center">
-        <h2 className="text-3xl font-semibold mb-4">How to Apply for a Visa</h2>
-        <p className="text-lg max-w-2xl mx-auto">
+      <div className="py-16 px-4 bg-gray-100 text-center dark:bg-gray-600">
+        <h2 className="text-3xl font-semibold mb-4 dark:text-white">
+          How to Apply for a Visa
+        </h2>
+        <p className="text-lg max-w-2xl mx-auto dark:text-white">
           Our platform provides a step-by-step guide to help you through the
           visa application process. Learn how to apply for your visa with
           confidence and ease.

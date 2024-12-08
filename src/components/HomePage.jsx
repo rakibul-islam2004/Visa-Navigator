@@ -71,7 +71,11 @@ const HomePage = () => {
   };
 
   if (loading) {
-    return <div className="text-center text-xl">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="w-10 h-10 border-4 border-blue-600 border-dotted rounded-full animate-spin"></div>
+      </div>
+    );
   }
 
   if (error) {

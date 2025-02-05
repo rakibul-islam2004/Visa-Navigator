@@ -4,7 +4,7 @@
 
 ## 🌐 Live Site
 
-[Visit VISA Navigator](https://dapper-melba-28e5a0.netlify.app/)
+<a href="microsoft-edge:https://dapper-melba-28e5a0.netlify.app/">Open VISA Navigator in Edge</a>
 
 ## ✨ Features
 
